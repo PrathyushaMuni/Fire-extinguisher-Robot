@@ -11,7 +11,9 @@ void setup()
 }
 
 void loop()
-{ 
+{
+// As we are usign motor sheild, we don't have access to digital pins. That's why we use analog pins. 
+//But the input given by flame sensor is digital.  
  flame_detected = digitalRead(flame_sensor); 
  if (flame_detected == 1) 
  {    
