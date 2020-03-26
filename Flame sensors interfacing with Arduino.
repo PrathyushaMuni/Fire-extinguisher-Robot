@@ -1,11 +1,12 @@
-int LED = 7;
+//This program is for interfacing flame sensors with Arduino.
+
+//Inititalizing signal pin with Analog pin A3 and a new variable flame _detected.
 int flame_sensor = A3;
 int flame_detected;
 
 void setup()
 { 
- Serial.begin(9600); 
- pinMode(LED, OUTPUT); 
+ Serial.begin(9600);  
  pinMode(flame_sensor, INPUT);
 }
 
@@ -14,16 +15,14 @@ void loop()
  flame_detected = digitalRead(flame_sensor); 
  if (flame_detected == 1) 
  {    
-  Serial.println("Flame detected...! take action immediately.");   
-  digitalWrite(LED, HIGH);    
+  Serial.println("Flame detected...! take action immediately.");    
   delay(200);    
-  digitalWrite(LED, LOW);    
-   delay(200);  
+  
  }  
 else 
 {    
   Serial.println("No flame detected. stay cool");       
-  digitalWrite(LED, LOW);  
+  
   }  
   delay(1000);
 }
