@@ -1,0 +1,92 @@
+
+//library for DC motor
+#include<AFMotor.h>
+
+//defining the two motors
+AF_DCMotor motor1(1,MOTOR12_64KHZ);
+AF_DCMotor motor2(2,MOTOR12_64KHZ);
+AF_DCMotor motor3(3,MOTOR12_64KHZ);
+
+//declaring flame Sensors, IR sensors Pins.
+//initializing variables.
+int flame_sensor1 = A3;
+int flame_sensor2 = A2;
+int flame_detected;
+int LeftSensor=A4;
+int RightSensor=A5;
+int L_sensor_val=0;//to store value from sensors.
+int R_sensor_val=0;
+//Threshold value is used for IR sensors to sense left and right sensor values and compare them.
+int threshold=500;
+
+void setup() {
+  Serial.begin(9600);
+  //initializing motor speed
+  motor1.setSpeed(100);
+               motor2.setSpeed(100);
+               motor3.setSpeed(100);
+               //set the speed to 200/255
+               //defining iputs.
+               pinMode(flame_sensor1, INPUT);
+               pinMode(flame_sensor2, INPUT);
+}
+
+//Creating a Function called Fire sensors.
+int Fire_sensors(int x){
+
+//Initializing local variable
+int flame_detected;
+
+ //Assigning local cariable value to input.
+flame_detected = digitalRead(x); 
+if (flame_detected == 1) 
+ {    
+  Serial.println("Flame detected...! take action immediately.");    
+  delay(200);  
+  motor1.run(FORWARD);  
+  motor2.run(RELEASE);
+  motor3.run(RELEASE);
+  
+ }
+else
+{    
+  Serial.println("No flame detected. stay cool");
+
+     //****************IR sensors and wheel rotation code************************
+     L_sensor_val=analogRead(LeftSensor); //Reading Left sensor data
+              R_sensor_val=analogRead(RightSensor); //Reading Right sensor data
+     if(L_sensor_val > threshold && R_sensor_val > threshold) {
+                          motor2.run(RELEASE);
+                          motor3.run(RELEASE);
+       }
+    if (L_sensor_val < threshold && R_sensor_val < threshold) {
+                          motor2.run(FORWARD);
+                          motor3.run(FORWARD);
+      }
+    if (L_sensor_val < threshold && R_sensor_val > threshold) {
+                        motor2.run(RELEASE);
+                        motor3.run(FORWARD);
+      }
+    if (L_sensor_val > threshold && R_sensor_val < threshold) {
+                       motor2.run(FORWARD);
+                       motor3.run(RELEASE);
+
+  
+      }
+
+      
+  
+  }  
+  delay(1000);
+}
+
+ // main function begins here
+void loop() {
+//calling the above created function for both flame sensors.
+int Fire_sensors(int flame_sensor1);
+int Fire_sensors(int flame_sensor2);
+ 
+  
+  
+ };
+ 
