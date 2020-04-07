@@ -1,0 +1,41 @@
+//This program is for interfacing flame sensors with Arduino.
+
+//defining the water sprinkler motor
+#include<AFMotor.h> //motor library
+
+
+
+//defining the water sprinkler motor
+AF_DCMotor motor1(1,MOTOR12_64KHZ);
+//Inititalizing signal pin with Analog pin A3 and a new variable flame _detected.
+int flame_sensor = A3;
+int flame_detected;
+
+void setup()
+{ 
+  Serial.begin(9600);
+               motor1.setSpeed(1000);
+               //set the speed to 200/255
+ pinMode(flame_sensor, INPUT);
+}
+
+void loop()
+{
+// As we are usign motor sheild, we don't have access to digital pins. That's why we use analog pins. 
+//But the input given by flame sensor is digital.  
+ flame_detected = digitalRead(flame_sensor); 
+ if (flame_detected == 1) 
+ {    
+  Serial.println("Flame detected...! take action immediately.");    
+  motor1.run(FORWARD);
+  delay(200);    
+  
+ }  
+else 
+{    
+  Serial.println("No flame detected. stay cool");       
+  motor1.run(RELEASE);
+  
+  }  
+  delay(1000);
+}
